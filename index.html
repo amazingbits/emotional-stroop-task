@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emotional Stroop Test</title>
+  <!-- CSS -->
+  <link rel="stylesheet" href="./css/fonts.css">
+  <link rel="stylesheet" href="./css/styles.css">
+  
+  <!-- JS -->
+  <script defer src="./js/font-awesome.js"></script>
+  <script defer src="./js/repository.js"></script>
+  <script defer src="./js/scripts.js"></script>
+</head>
+<body>
+
+  <div class="language-selector">
+    <i class="fa fa-globe"></i>
+    <div class="select-wrapper">
+      <select name="language" id="language">
+        <option value="pt">Português</option>
+        <option value="en">Inglês</option>
+      </select>
+      <span class="custom-arrow">▼</span>
+    </div>
+  </div>
+
+  <main>
+
+    <h1>Emotional Stroop Test</h1>
+    
+    <form id="userForm">
+      <div class="input-group">
+        <label for="username">Nome do participante</label>
+        <input type="text" name="username" id="username" autofocus required>
+      </div>
+
+      <div class="input-group">
+        <label for="email">E-mail do participante</label>
+        <input type="email" name="email" id="email" required>
+      </div>
+
+      <input type="submit" value="Iniciar">
+    </form>
+
+  </main> 
+</body>
+</html>
