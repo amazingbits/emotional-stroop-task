@@ -87,7 +87,6 @@ main {
 h1 {
   font-size: 1.6rem;
   color: #414141;
-  margin-bottom: 1rem;
 }
 
 form p {
@@ -107,7 +106,8 @@ form p {
   font-weight: 300;
 }
 
-.input-group input {
+.input-group input,
+.input-group select {
   width: 100%;
   outline: none;
   background-color: #CCCCCC;
@@ -123,4 +123,35 @@ form input[type="submit"] {
   cursor: pointer;
   color: #FFFFFF;
   font-weight: 700;
+}
+
+.page-form img {
+  max-width: 140px;
+}
+
+hr {
+  border: 1px solid #CCCCCC;
+  margin-bottom: 1.5rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.timer {
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 9999;
+}
+
+.timer img {
+  max-width: 280px;
 }

@@ -50,28 +50,35 @@ class IndexedDBRepository {
   }
 
   async search(storeName, criteria) {
-    return this._executeTransaction(storeName, 'readonly', (store) => {
+    return this._executeTransaction(storeName, "readonly", (store) => {
       return new Promise((resolve, reject) => {
         const results = [];
         const request = store.openCursor();
-
+  
         request.onsuccess = (event) => {
           const cursor = event.target.result;
           if (cursor) {
-            const match = Object.keys(criteria).every(key => {
-              if (typeof cursor.value[key] === 'string') {
+            const match = Object.keys(criteria).every((key) => {
+              if (typeof cursor.value[key] === "string") {
                 return cursor.value[key].includes(criteria[key]);
               }
               return cursor.value[key] === criteria[key];
             });
-            if (match) results.push(cursor.value);
+  
+            if (match) {
+              results.push(cursor.value);
+            }
+  
             cursor.continue();
           } else {
             resolve(results);
           }
         };
-
-        request.onerror = (event) => reject(`Erro na busca: ${event.target.errorCode}`);
+  
+        request.onerror = (event) => {
+          console.error("Erro na busca:", event.target.error);
+          reject(`Erro na busca: ${event.target.error}`);
+        };
       });
     });
   }
@@ -80,10 +87,15 @@ class IndexedDBRepository {
     return new Promise((resolve, reject) => {
       const transaction = this.db.transaction(storeName, mode);
       const store = transaction.objectStore(storeName);
-      const request = operation(store);
-
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = (event) => reject(`Erro: ${event.target.errorCode}`);
+      const result = operation(store);
+  
+      if (result instanceof Promise) {
+        result.then(resolve).catch(reject);
+      } else {
+        resolve(result);
+      }
+  
+      transaction.onerror = (event) => reject(`Erro na transação: ${event.target.errorCode}`);
     });
   }
 }
