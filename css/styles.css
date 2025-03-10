@@ -155,3 +155,31 @@ hr {
 .timer img {
   max-width: 280px;
 }
+
+.control-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  max-width: 280px;
+  min-width: 280px;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 1rem;
+}
+
+.control-buttons a {
+  border-radius: 20px;
+  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.2);
+  background-color: #00000008;
+  font-size: 40px;
+  font-weight: 700;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+}

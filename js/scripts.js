@@ -119,14 +119,17 @@ if (selectLanguageInput) {
 }
 
 const pageForm = document.querySelector(".page-form");
-const pageTask = document.querySelector(".page-task");
 
-// iniciando com página task escondida
-pageTask.classList.add("hidden");
+const controlButtons = document.querySelector(".control-buttons");
+controlButtons.style.display = "none";
 
 function clearForm() {
   document.querySelector("input[name='username']").value = "";
   document.querySelector("input[name='email']").value = "";
+}
+
+function isMobileDevice() {
+  return window.matchMedia("only screen and (max-width: 768px)").matches;
 }
 
 const userForm = document.querySelector("#userForm");
@@ -140,12 +143,9 @@ if (userForm) {
 
     const findUserByEmail = await db.search("users", {email});
 
-    if (findUserByEmail.length > 0) {
-      alert("Email já cadastrado");
-      return;
+    if (findUserByEmail.length === 0) {
+      await db.add("users", { username, email });
     }
-
-    await db.add("users", { username, email });
     const user = await db.search("users", { email });
 
     window.localStorage.setItem("current-user", JSON.stringify(user[0]));
@@ -206,6 +206,10 @@ async function startStroopTest() {
   }
 
   async function showNextWord() {
+    if (isMobileDevice()) {
+      controlButtons.style.display = "flex";
+    }
+
     if (index >= words.length) {
       const params =  {
         username: currentUser.username,
@@ -238,8 +242,34 @@ async function startStroopTest() {
         });
 
         document.removeEventListener("keydown", keyPressHandler);
+        document.removeEventListener("click", buttonClickHandler);
         testContainer.innerText = "";
 
+        controlButtons.style.display = "none";
+        setTimeout(() => {
+          index++;
+          showNextWord();
+        }, 1000);
+      }
+    }
+
+    function buttonClickHandler(event) {
+      let button = event.target.closest("a")?.dataset?.value;
+      if (button) {
+        let responseTime = (Date.now() - startTime) / 1000;
+        let correct = (button === "C" && wordData.answer === "green") || 
+                      (button === "M" && wordData.answer === "blue");
+        results.push({
+          word: wordData.word,
+          color: wordData.color,
+          responseTime: responseTime.toFixed(2),
+          correct
+        });
+        document.removeEventListener("keydown", keyPressHandler);
+        document.removeEventListener("click", buttonClickHandler);
+        testContainer.innerText = "";
+
+        controlButtons.style.display = "none";
         setTimeout(() => {
           index++;
           showNextWord();
@@ -248,9 +278,11 @@ async function startStroopTest() {
     }
 
     document.addEventListener("keydown", keyPressHandler);
+    document.addEventListener("click", buttonClickHandler);
   }
 
   function showResults() {
+    controlButtons.style.display = "none";
     testContainer.innerHTML = `
       <h2 style="font-size: 24px; margin-bottom: 10px;">FIM</h2>
       <p style="font-size: 18px;"><strong>Nome:</strong> ${currentUser.username}</p>
